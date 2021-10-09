@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Firebase Phone Number Auth</title>
+</head>
+
+<body>
+    <form>
+        <input type="text" id="phoneNumber" value="phoneNumber">
+        <input type="text" id="otp" value="enter verification">
+        <input type="button" value="Submit" onclick="verifyOtp()">
+        <input type="button" value="get Otp" onclick="getOtpOnPhone()">
+    </form>
+    <div id="recaptcha-container"></div>
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase.js"></script>
+    <script type="text/javascript">
+        // Initialize Firebase
+        var config = {
+                apiKey: "##########",
+                authDomain: "#########",
+                projectId: "##########",
+                storageBucket: "##########",
+                messagingSenderId: "#########",
+                appId: "###########",
+                measurementId: "###############"
+            };
+        firebase.initializeApp(config);
+    </script>
+    <script type="text/javascript">
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+        function getOtpOnPhone(){
+            firebase.auth().signInWithPhoneNumber(document.getElementById("phoneNumber").value, window.recaptchaVerifier)
+                .then(function (confirmationResult) {
+                    window.confirmationResult = confirmationResult;
+                    console.log(confirmationResult);
+                })
+        }
+        var verifyOtp = function () {
+            window.confirmationResult.confirm(document.getElementById("otp").value)
+                .then(function (result) {
+                    console.log(result);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+        };
+    </script>
+</body>
+
+</html>
